@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {margin: 0; padding: 0; border: none;}
+        ul,li {list-style: none;}
+
+
+        #loutiNav {
+            position: fixed;
+            left: 40px;
+            top: 25%;
+            width: 30px;
+            border: 1px solid black;
+            background:pink;
+        }
+        #loutiNav li {
+            width: 30px;
+            height: 29px;
+            border-bottom: 1px dashed white;
+            font-size: 14px;
+            text-align: center;
+            line-height: 29px;
+            position: relative;
+            cursor: pointer;
+        }
+        #loutiNav li span {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 29px;
+            background: white;
+        }
+        #loutiNav li:hover span{
+            display: block;
+            background: darkred;
+            color:  white;
+        }
+        #loutiNav li span.active {
+            display: block;
+            background: white;
+            color: darkred;
+        }
+
+        #head, #main div, #foot {
+            width: 1000px;
+            height: 600px;
+            font-size: 100px;
+            text-align: center;
+            line-height: 600px;
+            margin: 0 auto;
+        }
+
+    </style>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        $(function(){
+
+            var isMoving = false; //是否点击了按钮页面正在动画移动
+
+            $("#loutiNav li").click(function(){
+
+                //改变按钮的选中状态
+                $(this).find("span").addClass("active")
+                        .parent().siblings().find("span").removeClass("active");
+
+                //移动页面到对应的楼层
+                var index = $(this).index();
+                var _top = $(".louti").eq(index).offset().top;
+
+                //$(window).scrollTop(_top);
+                isMoving = true;
+                $("html, body").stop().animate({scrollTop:_top}, 400, function(){
+                    isMoving = false;
+                });
+            })
+
+            //滚动事件
+            $(window).scroll(function(){
+
+                if ( !isMoving ) {
+                    var scrollTop = $(window).scrollTop();
+
+                    //遍历所有楼层
+                    var index = 0;
+                    $(".louti").each(function(){
+                        if ( scrollTop >= $(this).offset().top ){
+                            //console.log( $(this).index() );
+                            index = $(this).index();
+                        }
+                    })
+                    //console.log(index);
+
+                    $("#loutiNav li").eq(index).find("span").addClass("active")
+                            .parent().siblings().find("span").removeClass("active");
+                }
+            })
+
+
+        })
+    </script>
+</head>
+<body>
+<div id="loutiNav">
+    <ul>
+        <li>1F<span class="active">服饰</span></li>
+        <li>2F<span>美妆</span></li>
+        <li>3F<span>手机</span></li>
+        <li>4F<span>家电</span></li>
+        <li>5F<span>数码</span></li>
+        <li>6F<span>运动</span></li>
+        <li>7F<span>居家</span></li>
+        <li>8F<span>母婴</span></li>
+        <li>9F<span>食品</span></li>
+        <li>10F<span>图书</span></li>
+        <li>11F<span>服务</span></li>
+    </ul>
+</div>
+
+<div id="head" style="background: #008800;">头部</div>
+<div id="main">
+    <div class="louti" style="background: #666699;">1F服饰</div>
+    <div class="louti" style="background: #66FF99;">2F美妆</div>
+    <div class="louti" style="background: #33CC99;">3F手机</div>
+    <div class="louti" style="background: #663399;">4F家电</div>
+    <div class="louti" style="background: #669966;">5F数码</div>
+    <div class="louti" style="background: #99FF99;">6F运动</div>
+    <div class="louti" style="background: #33FF99;">7F居家</div>
+    <div class="louti" style="background: #66CC99;">8F母婴</div>
+    <div class="louti" style="background: #663377;">9F食品</div>
+    <div class="louti" style="background: #666666;">10F图书</div>
+    <div class="louti" style="background: #9999FF;">11F服务</div>
+</div>
+<div id="foot" style="background: #008800;">尾部</div>
+
+</body>
+</html>
